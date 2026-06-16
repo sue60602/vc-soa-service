@@ -1,0 +1,1111 @@
+﻿<!DOCTYPE html>
+<html lang="zh-TW" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>蘇郁盛 | YS SU - 頂級電競實戰顧問與數據專家</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        techBlue: '#3b82f6',
+                        premiumPurple: '#8b5cf6',
+                        cyberIndigo: '#6366f1',
+                        mintGreen: '#10b981',
+                        darkBg: '#030712',
+                        panelBg: 'rgba(15, 23, 42, 0.55)',
+                    },
+                    fontFamily: {
+                        sans: ['Outfit', 'Space Grotesk', 'Noto Sans TC', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=Noto+Sans+TC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVJkEZSMUkrQ6usKGiToD8603pE0yNYSQpFsSMsPXJ7XcYoYIC50ZnzuaG+VvFCOywUStw686NB==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    
+    <style>
+        /* 奢華暗色玻璃擬態 */
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.65);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(139, 92, 246, 0.15);
+        }
+        
+        .glass-panel-light {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        /* 漸層發光邊框 Hover 效果 */
+        .glow-card {
+            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+        }
+        .glow-card::after {
+            content: '';
+            position: absolute;
+            inset: -1px;
+            border-radius: inherit;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.4), rgba(139, 92, 246, 0.4));
+            opacity: 0;
+            transition: opacity 0.6s ease;
+            z-index: -1;
+        }
+        .glow-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 30px 60px rgba(139, 92, 246, 0.12), 0 0 15px rgba(59, 130, 246, 0.1);
+            border-color: rgba(139, 92, 246, 0.5);
+        }
+        .glow-card:hover::after {
+            opacity: 1;
+        }
+
+        /* 滾動揭示微動畫 */
+        .reveal {
+            opacity: 0;
+            transform: translateY(32px);
+            transition: all 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* 打字機游標閃爍 */
+        .cursor-blink::after {
+            content: '|';
+            animation: blink 0.8s infinite;
+            color: #8b5cf6;
+            margin-left: 4px;
+        }
+        @keyframes blink {
+            0%, 100% { opacity: 0; }
+            50% { opacity: 1; }
+        }
+
+        /* 漸層科技背景動態微調 */
+        .ambient-glow {
+            filter: blur(140px);
+            opacity: 0.35;
+            pointer-events: none;
+        }
+
+        /* 圖片懸停縮放 */
+        .img-zoom {
+            transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .img-zoom:hover {
+            transform: scale(1.06);
+        }
+    </style>
+    <!-- Custom black-red theme overrides -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-darkBg text-slate-200 font-sans min-h-screen relative overflow-x-hidden selection:bg-premiumPurple/20 selection:text-premiumPurple">
+
+    <!-- 背景 Canvas 粒子節點特效 -->
+    <canvas id="bg-canvas" class="fixed top-0 left-0 w-full h-full -z-20 pointer-events-none opacity-90"></canvas>
+
+    <!-- 背景網格線疊加 -->
+    <div class="fixed inset-0 -z-30 bg-[linear-gradient(to_right,rgba(139,92,246,0.02)_1px,transparent_1px),linear-gradient(to_bottom,rgba(139,92,246,0.02)_1px,transparent_1px)] bg-[size:5rem_5rem] pointer-events-none"></div>
+
+    <!-- 背景奢華漸層氛圍光暈 -->
+    <div class="fixed top-[-10%] left-[-10%] w-[60vw] h-[60vw] rounded-full bg-blue-950/40 ambient-glow -z-10"></div>
+    <div class="fixed bottom-[-10%] right-[-10%] w-[70vw] h-[70vw] rounded-full bg-purple-950/40 ambient-glow -z-10"></div>
+    <div class="fixed top-[40%] left-[30%] w-[30vw] h-[30vw] rounded-full bg-indigo-950/20 ambient-glow -z-10"></div>
+
+    <!-- 導覽列 (Navbar) -->
+    <nav class="fixed top-0 left-0 w-full z-50 transition-all duration-300 border-b border-transparent" id="navbar">
+        <div class="max-w-7xl mx-auto px-6 lg:px-12 py-5 flex items-center justify-between">
+            <!-- Logo & Brand -->
+            <a href="#hero" class="flex items-center space-x-3 group">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-tsmCharcoal to-tsmRed flex items-center justify-center text-white font-extrabold text-lg shadow-lg shadow-tsmRed/20 group-hover:scale-105 transition-transform">
+                    YS
+                </div>
+                <div>
+                    <span class="font-bold tracking-wider text-slate-100 text-lg block leading-tight">蘇郁盛 <span class="text-xs font-normal text-slate-400">| YS SU</span></span>
+                    <span class="text-[10px] text-tsmRed tracking-widest uppercase block font-semibold">Esports Consultant</span>
+                </div>
+            </a>
+
+            <!-- 桌面版選單 -->
+            <div class="hidden lg:flex items-center space-x-8">
+                <a href="#hero" class="text-sm font-medium text-slate-300 hover:text-tsmRed transition-colors">首頁</a>
+                <a href="#about" class="text-sm font-medium text-slate-300 hover:text-tsmRed transition-colors">關於顧問</a>
+                <a href="#services" class="text-sm font-medium text-slate-300 hover:text-tsmRed transition-colors">核心服務</a>
+                <a href="#portfolio" class="text-sm font-medium text-slate-300 hover:text-tsmRed transition-colors">實戰成果</a>
+                <a href="#blog" class="text-sm font-medium text-slate-300 hover:text-tsmRed transition-colors">技術部落格</a>
+                <a href="#contact" class="text-sm font-medium text-slate-300 hover:text-tsmRed transition-colors">預約諮詢</a>
+            </div>
+
+            <!-- 右側行動呼籲 -->
+            <div class="hidden lg:block">
+                <a href="https://calendar.app.google/2rxk8QQi197eyFob8" target="_blank" class="px-6 py-2.5 rounded-xl bg-gradient-to-r from-tsmCharcoal to-tsmRed text-white font-semibold text-sm hover:opacity-95 hover:shadow-lg hover:shadow-tsmRed/30 transition-all duration-300 transform active:scale-95 inline-block">
+                    立即預約
+                </a>
+            </div>
+
+            <!-- 手機版漢堡選單按鈕 -->
+            <button class="lg:hidden w-10 h-10 flex flex-col items-center justify-center space-y-1.5 focus:outline-none z-50" id="menu-btn" aria-label="Toggle Menu">
+                <span class="w-6 h-0.5 bg-slate-100 transition-all duration-300" id="hamburger-top"></span>
+                <span class="w-6 h-0.5 bg-slate-100 transition-all duration-300" id="hamburger-mid"></span>
+                <span class="w-6 h-0.5 bg-slate-100 transition-all duration-300" id="hamburger-bot"></span>
+            </button>
+        </div>
+
+        <!-- 手機版抽屜選單 -->
+        <div class="fixed inset-0 bg-darkBg/98 backdrop-blur-2xl transform translate-x-full transition-transform duration-500 z-40 flex flex-col justify-center items-center space-y-8" id="mobile-menu">
+            <a href="#hero" class="text-2xl font-semibold text-slate-100 hover:text-premiumPurple transition-colors mobile-link">首頁</a>
+            <a href="#about" class="text-2xl font-semibold text-slate-100 hover:text-premiumPurple transition-colors mobile-link">關於顧問</a>
+            <a href="#services" class="text-2xl font-semibold text-slate-100 hover:text-premiumPurple transition-colors mobile-link">核心服務</a>
+            <a href="#portfolio" class="text-2xl font-semibold text-slate-100 hover:text-premiumPurple transition-colors mobile-link">實戰成果</a>
+            <a href="#blog" class="text-2xl font-semibold text-slate-100 hover:text-premiumPurple transition-colors mobile-link">技術部落格</a>
+            <a href="#contact" class="text-2xl font-semibold text-slate-100 hover:text-premiumPurple transition-colors mobile-link">預約諮詢</a>
+            <a href="https://calendar.app.google/2rxk8QQi197eyFob8" target="_blank" class="px-10 py-4 rounded-xl bg-gradient-to-r from-tsmCharcoal to-tsmRed text-white font-semibold text-lg hover:shadow-xl hover:shadow-tsmRed/25 transition-all duration-300">
+                立即預約諮詢
+            </a>
+        </div>
+    </nav>
+
+    <!-- 首頁區塊 (Hero Section) -->
+    <section id="hero" class="relative min-h-screen flex items-center pt-32 pb-24 px-6 lg:px-12 max-w-7xl mx-auto">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center w-full">
+            <!-- 左側文字與核心 CTA -->
+            <div class="lg:col-span-7 flex flex-col justify-center space-y-8 z-10">
+                <!-- 狀態標籤 -->
+                <div class="inline-flex items-center space-x-2.5 px-4 py-2 rounded-full bg-purple-950/60 border border-premiumPurple/30 w-fit">
+                    <span class="flex h-2.5 w-2.5 relative">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-premiumPurple opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-premiumPurple"></span>
+                    </span>
+                    <span class="text-xs font-semibold tracking-wider text-premiumPurple uppercase">Apex Legends Tactical Analyst</span>
+                </div>
+
+                <!-- 打字機主標題 -->
+                <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight leading-tight min-h-[120px] sm:min-h-[150px] lg:min-h-[180px]">
+                    <span id="typewriter" class="cursor-blink bg-clip-text text-transparent bg-gradient-to-r from-white via-slate-100 to-purple-400"></span>
+                </h1>
+
+                <!-- 副標題 -->
+                <p class="text-base sm:text-lg text-slate-400 max-w-2xl leading-relaxed font-light">
+                    10年電競實戰淬鍊，頂級 Apex Legends 戰術顧問。從基礎牌位突破到職業級大局觀，用數據與系統化分析，為你解鎖高端競技極限。
+                </p>
+
+                <!-- 行動呼籲按鈕組 -->
+                <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 pt-4">
+                    <!-- 頂級特殊互動按鈕 -->
+                    <a href="https://calendar.app.google/2rxk8QQi197eyFob8" target="_blank" 
+                       id="interactive-cta"
+                       class="relative px-8 py-4 rounded-xl border border-tsmRed/40 glass-panel shadow-lg shadow-red-950/20 text-center text-tsmRed font-semibold tracking-wider transition-all duration-300 hover:scale-[1.02] flex items-center justify-center min-w-[260px] group overflow-hidden">
+                        <span id="cta-text" class="relative z-10 transition-all duration-300">預約實戰諮詢</span>
+                    </a>
+                    
+                    <a href="#about" class="px-8 py-4 rounded-xl border border-slate-800 text-center text-slate-300 font-medium hover:bg-slate-900/50 hover:text-white transition-all duration-300">
+                        瞭解更多
+                    </a>
+                </div>
+            </div>
+
+            <!-- 右側幾何美學圖像裝飾 -->
+            <div class="lg:col-span-5 relative flex justify-center items-center h-full min-h-[350px] lg:min-h-[500px]">
+                <!-- 主視覺插圖：高端科技流動渲染 -->
+                <div class="absolute w-80 h-80 rounded-[2.5rem] overflow-hidden border border-premiumPurple/30 shadow-2xl rotate-6 animate-[pulse_6s_infinite_alternate]">
+                    <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80" 
+                         alt="Premium Tech Abstract" 
+                         class="w-full h-full object-cover opacity-80"
+                         onerror="this.style.display='none'">
+                    <div class="absolute inset-0 bg-gradient-to-t from-darkBg via-transparent to-transparent"></div>
+                </div>
+
+                <div class="absolute w-72 h-72 rounded-[2rem] overflow-hidden border border-cyberIndigo/20 shadow-xl -rotate-12 translate-x-4 translate-y-4 opacity-50">
+                    <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=600&q=80" 
+                         alt="Cyber Tech Components" 
+                         class="w-full h-full object-cover">
+                </div>
+                
+                <!-- 核心微數據展示器 -->
+                <div class="absolute p-6 rounded-2xl glass-panel shadow-2xl border border-premiumPurple/20 w-56 -translate-x-12 -translate-y-16 glow-card z-20">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-[10px] uppercase tracking-wider text-slate-400 font-semibold">System Diagnostics</span>
+                        <span class="text-[10px] px-2 py-0.5 rounded bg-emerald-950/80 text-mintGreen border border-mintGreen/30 font-bold">READY</span>
+                    </div>
+                    <div class="h-1.5 w-full bg-slate-900 rounded-full mb-4 overflow-hidden">
+                        <div class="h-full w-4/5 bg-gradient-to-r from-techBlue via-cyberIndigo to-premiumPurple rounded-full animate-[pulse_2s_infinite]"></div>
+                    </div>
+                    <div class="text-2xl font-bold text-white tracking-tight">Apex 99.8%</div>
+                    <p class="text-[11px] text-slate-400 mt-1">戰術決策與模型精確度</p>
+                </div>
+
+                <div class="absolute p-5 rounded-2xl glass-panel shadow-2xl border border-cyberIndigo/20 w-48 translate-x-16 translate-y-24 glow-card z-20">
+                    <div class="text-slate-400 text-[10px] font-semibold tracking-wider uppercase">ISMS Certified</div>
+                    <div class="text-xl font-bold text-white mt-1 flex items-center space-x-1.5">
+                        <svg class="w-5 h-5 text-mintGreen" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+                        <span>極致安全</span>
+                    </div>
+                    <p class="text-[10px] text-slate-400 mt-1">資安稽核級保密協議</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 關於我 (About Consultant) -->
+    <section id="about" class="py-24 px-6 lg:px-12 max-w-7xl mx-auto scroll-mt-20">
+        <div class="reveal">
+            <!-- 區塊標題 -->
+            <div class="flex flex-col items-center text-center space-y-3 mb-16">
+                <span class="text-xs font-bold tracking-widest text-tsmRed uppercase">About Consultant</span>
+                <h2 class="text-3xl sm:text-4xl font-bold text-white">核心履歷與專業態度</h2>
+                <div class="h-1 w-12 bg-tsmRed rounded-full"></div>
+            </div>
+
+            <!-- 主排版 -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                <!-- 履歷內文 -->
+                <div class="lg:col-span-6 space-y-6">
+                    <h3 class="text-2xl font-bold text-slate-100 leading-snug">
+                        我是蘇郁盛。將電競視作高精度的科技競技，把資安思維注入每一次進圈抉擇。
+                    </h3>
+                    <p class="text-slate-400 leading-relaxed font-light">
+                        擁有超過 10 年經驗的專業 Apex Legends 玩家與電競實戰顧問。累積從金牌、銀牌、白金、鑽石至大師段位的豐富實戰經驗，能深刻剖析並解決不同階段玩家的成長瓶頸、操作痛點以及戰術盲區。
+                    </p>
+                    <p class="text-slate-400 leading-relaxed font-light">
+                        與多位頂尖職業選手共同研究，結合客觀的戰局數據指標，將直覺反應轉化為系統化的勝率模型。我們不僅追求「槍法強大」，更追求在混沌無常的賽局中進行「零容錯決策」。
+                    </p>
+                    <div class="flex items-center space-x-4 pt-2">
+                        <div class="flex items-center space-x-2">
+                            <span class="w-2.5 h-2.5 rounded-full bg-tsmRed"></span>
+                            <span class="text-sm font-semibold text-slate-300">數據驅動</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <span class="w-2.5 h-2.5 rounded-full bg-tsmCrimson"></span>
+                            <span class="text-sm font-semibold text-slate-300">軍規級保密</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <span class="w-2.5 h-2.5 rounded-full bg-tsmRed"></span>
+                            <span class="text-sm font-semibold text-slate-300">實戰導向</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 特色標籤與數據儀表板樣式卡片群 -->
+                <div class="lg:col-span-6 grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <!-- 卡片 1 -->
+                    <div class="p-6 rounded-2xl border border-white/5 glass-panel glow-card flex flex-col justify-between h-48 relative overflow-hidden group">
+                        <div class="absolute inset-0 bg-gradient-to-b from-transparent to-slate-950/80 -z-10"></div>
+                        <div class="absolute inset-0 opacity-10 group-hover:opacity-20 transition-opacity">
+                            <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=300&q=80" alt="Esports" class="w-full h-full object-cover">
+                        </div>
+                        <div>
+                            <div class="p-2 w-10 h-10 rounded-lg bg-blue-950/80 text-techBlue flex items-center justify-center mb-4 border border-blue-800/30">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            </div>
+                            <h4 class="text-sm font-semibold text-slate-400 tracking-wider">競技遊戲深耕</h4>
+                        </div>
+                        <div class="text-3xl font-bold text-white z-10">10+ 年</div>
+                    </div>
+
+                    <!-- 卡片 2 -->
+                    <div class="p-6 rounded-2xl border border-white/5 glass-panel glow-card flex flex-col justify-between h-48 relative overflow-hidden group">
+                        <div class="absolute inset-0 bg-gradient-to-b from-transparent to-slate-950/80 -z-10"></div>
+                        <div class="absolute inset-0 opacity-10 group-hover:opacity-20 transition-opacity">
+                            <img src="https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=300&q=80" alt="Gaming Setup" class="w-full h-full object-cover">
+                        </div>
+                        <div>
+                            <div class="p-2 w-10 h-10 rounded-lg bg-red-950/80 text-tsmCrimson flex items-center justify-center mb-4 border border-red-800/30">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"></path></svg>
+                            </div>
+                            <h4 class="text-sm font-semibold text-slate-400 tracking-wider">最高競技認證</h4>
+                        </div>
+                        <div class="text-3xl font-bold text-white z-10">大師段位</div>
+                    </div>
+
+                    <!-- 卡片 3 -->
+                    <div class="p-6 rounded-2xl border border-white/5 glass-panel glow-card flex flex-col justify-between h-48 relative overflow-hidden group">
+                        <div class="absolute inset-0 bg-gradient-to-b from-transparent to-slate-950/80 -z-10"></div>
+                        <div class="absolute inset-0 opacity-10 group-hover:opacity-20 transition-opacity">
+                            <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=300&q=80" alt="Tech Motherboard" class="w-full h-full object-cover">
+                        </div>
+                        <div>
+                            <div class="p-2 w-10 h-10 rounded-lg bg-blue-950/80 text-techBlue flex items-center justify-center mb-4 border border-blue-800/30">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path></svg>
+                            </div>
+                            <h4 class="text-sm font-semibold text-slate-400 tracking-wider">國際頂規體系</h4>
+                        </div>
+                        <div class="text-base font-bold text-white leading-tight z-10">研習 TSM/FLCN/TOC 戰術，ALGS 前段排名</div>
+                    </div>
+
+                    <!-- 卡片 4 -->
+                    <div class="p-6 rounded-2xl border border-white/5 glass-panel glow-card flex flex-col justify-between h-48 relative overflow-hidden group">
+                        <div class="absolute inset-0 bg-gradient-to-b from-transparent to-slate-950/80 -z-10"></div>
+                        <div class="absolute inset-0 opacity-10 group-hover:opacity-20 transition-opacity">
+                            <img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=300&q=80" alt="Matrix Cyber" class="w-full h-full object-cover">
+                        </div>
+                        <div>
+                            <div class="p-2 w-10 h-10 rounded-lg bg-slate-900/80 text-slate-300 flex items-center justify-center mb-4 border border-slate-800/30">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                            </div>
+                            <h4 class="text-sm font-semibold text-slate-400 tracking-wider">專業誠信防護</h4>
+                        </div>
+                        <div class="text-base font-bold text-white leading-tight z-10">ISMS 主導稽核員，將資安級嚴謹融入戰術</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 核心服務項目 (Services) -->
+    <section id="services" class="py-24 bg-slate-950/40 border-y border-purple-950/30 scroll-mt-20">
+        <div class="max-w-7xl mx-auto px-6 lg:px-12 reveal">
+            <!-- 區塊標題 -->
+            <div class="flex flex-col items-center text-center space-y-3 mb-16">
+                <span class="text-xs font-bold tracking-widest text-premiumPurple uppercase">Core Services</span>
+                <h2 class="text-3xl sm:text-4xl font-bold text-white">量身規劃的電競成長方案</h2>
+                <div class="h-1 w-12 bg-premiumPurple rounded-full"></div>
+            </div>
+
+            <!-- 服務卡片清單 -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- 服務 1 -->
+                <div class="p-8 rounded-3xl border border-white/5 glass-panel glow-card flex flex-col justify-between space-y-8 relative overflow-hidden group">
+                    <div class="absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity duration-500 pointer-events-none -z-10">
+                        <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=400&q=80" alt="Apex Gaming" class="w-full h-full object-cover">
+                    </div>
+                    <div class="space-y-4">
+                        <div class="w-12 h-12 rounded-2xl bg-red-950/80 text-tsmRed flex items-center justify-center border border-red-800/30">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                        </div>
+                        <h3 class="text-xl font-bold text-white">專業牌位突破與安全代打</h3>
+                        <p class="text-slate-400 text-sm leading-relaxed font-light">
+                            協助陷入瓶頸期的玩家，安全、快速且穩定地突破當前牌位，達成心目中的榮耀目標段位。我們全面實施資安級保密協議，絕不透露客戶隱私與個人帳號安全。
+                        </p>
+                    </div>
+                    <ul class="space-y-2.5 text-xs font-medium text-slate-400 pt-4 border-t border-slate-800">
+                        <li class="flex items-center space-x-2">
+                            <span class="w-1.5 h-1.5 rounded-full bg-tsmRed"></span>
+                            <span>純手工實戰操作，絕無不良外掛風險</span>
+                        </li>
+                        <li class="flex items-center space-x-2">
+                            <span class="w-1.5 h-1.5 rounded-full bg-tsmRed"></span>
+                            <span>終端隱私保護，嚴格 IP 安全鎖定</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- 服務 2 -->
+                <div class="p-8 rounded-3xl border border-white/5 glass-panel glow-card flex flex-col justify-between space-y-8 relative overflow-hidden group">
+                    <div class="absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity duration-500 pointer-events-none -z-10">
+                        <img src="https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=400&q=80" alt="Coaching Session" class="w-full h-full object-cover">
+                    </div>
+                    <div class="space-y-4">
+                        <div class="w-12 h-12 rounded-2xl bg-purple-950/80 text-premiumPurple flex items-center justify-center border border-purple-800/30">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                        </div>
+                        <h3 class="text-xl font-bold text-white">高端實戰陪玩與觀念指導</h3>
+                        <p class="text-slate-400 text-sm leading-relaxed font-light">
+                            由大師級戰術導師親自帶隊實戰，語音系統化即時交流。在激烈的對局中即時分享高端宏觀決策、極限操作細節、防線走位技巧與報位習慣。
+                        </p>
+                    </div>
+                    <ul class="space-y-2.5 text-xs font-medium text-slate-400 pt-4 border-t border-slate-800">
+                        <li class="flex items-center space-x-2">
+                            <span class="w-1.5 h-1.5 rounded-full bg-premiumPurple"></span>
+                            <span>1對1語音實戰，同步建立觀念大局觀</span>
+                        </li>
+                        <li class="flex items-center space-x-2">
+                            <span class="w-1.5 h-1.5 rounded-full bg-premiumPurple"></span>
+                            <span>動態應變示範，快速吸收高階對戰思路</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- 服務 3 -->
+                <div class="p-8 rounded-3xl border border-white/5 glass-panel glow-card flex flex-col justify-between space-y-8 relative overflow-hidden group">
+                    <div class="absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity duration-500 pointer-events-none -z-10">
+                        <img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=400&q=80" alt="Analysis VOD" class="w-full h-full object-cover">
+                    </div>
+                    <div class="space-y-4">
+                        <div class="w-12 h-12 rounded-2xl bg-emerald-950/80 text-mintGreen flex items-center justify-center border border-emerald-800/30">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                        </div>
+                        <h3 class="text-xl font-bold text-white">一對一戰術教練與複盤</h3>
+                        <p class="text-slate-400 text-sm leading-relaxed font-light">
+                            最深入的個人專屬講堂。提供科學、客觀的戰術與操作指標解析。透過錄影影片逐幀深度分析、大局進圈策略拆解、戰隊定位培訓與決策思維鍛鍊。
+                        </p>
+                    </div>
+                    <ul class="space-y-2.5 text-xs font-medium text-slate-400 pt-4 border-t border-slate-800">
+                        <li class="flex items-center space-x-2">
+                            <span class="w-1.5 h-1.5 rounded-full bg-mintGreen"></span>
+                            <span>影片複盤（VOD review），解構習慣盲點</span>
+                        </li>
+                        <li class="flex items-center space-x-2">
+                            <span class="w-1.5 h-1.5 rounded-full bg-mintGreen"></span>
+                            <span>針對性戰術手冊、點位解析與角色養成</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 實戰成果/作品集 (Portfolio) -->
+    <section id="portfolio" class="py-24 px-6 lg:px-12 max-w-7xl mx-auto scroll-mt-20">
+        <div class="reveal">
+            <!-- 區塊標題 -->
+            <div class="flex flex-col items-center text-center space-y-3 mb-16">
+                <span class="text-xs font-bold tracking-widest text-premiumPurple uppercase">Success &amp; Honor</span>
+                <h2 class="text-3xl sm:text-4xl font-bold text-white">競技榮耀與學員見證</h2>
+                <div class="h-1 w-12 bg-premiumPurple rounded-full"></div>
+            </div>
+
+            <!-- 作品卡片展示 -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- 榮耀 1 -->
+                <div class="group relative overflow-hidden rounded-3xl border border-white/5 glass-panel shadow-lg hover:shadow-2xl transition-all duration-300">
+                    <div class="p-8 space-y-4">
+                        <div class="flex items-center justify-between">
+                            <span class="text-[11px] font-bold tracking-widest text-techBlue uppercase">ALGS 賽事名次</span>
+                            <span class="text-xs px-2.5 py-1 rounded-full bg-blue-950 text-techBlue font-semibold border border-blue-800/30">Tournament</span>
+                        </div>
+                        <h3 class="text-lg font-bold text-white">官方常態對局及 ALGS 體系訓練</h3>
+                        <p class="text-slate-400 text-sm font-light">
+                            具備與國際級電競俱樂部（TSM、Falcon 等）同等的戰術深度及溝通決策邏輯。在各類高壓力聯賽中獲得極佳前段名次。
+                        </p>
+                        <!-- 高質感配圖與微動態 -->
+                        <div class="w-full h-44 bg-slate-900 rounded-2xl overflow-hidden relative border border-slate-800">
+                            <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=600&q=80" 
+                                 alt="ALGS Vibe" 
+                                 class="w-full h-full object-cover opacity-60 img-zoom">
+                            <div class="absolute inset-0 bg-gradient-to-t from-darkBg via-transparent to-transparent"></div>
+                            <div class="absolute bottom-3 left-3 flex items-center space-x-1.5 bg-slate-950/80 px-2.5 py-1 rounded text-[10px] text-techBlue font-semibold border border-blue-500/20">
+                                <span>LIVE BROADCAST DATA</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 榮耀 2 -->
+                <div class="group relative overflow-hidden rounded-3xl border border-white/5 glass-panel shadow-lg hover:shadow-2xl transition-all duration-300">
+                    <div class="p-8 space-y-4">
+                        <div class="flex items-center justify-between">
+                            <span class="text-[11px] font-bold tracking-widest text-premiumPurple uppercase">大師榮耀</span>
+                            <span class="text-xs px-2.5 py-1 rounded-full bg-purple-950 text-premiumPurple font-semibold border border-purple-800/30">Master Rank</span>
+                        </div>
+                        <h3 class="text-lg font-bold text-white">連續多賽季大師級實戰深度</h3>
+                        <p class="text-slate-400 text-sm font-light">
+                            完美應對獵殺與大師場次的極端強度，累積大量高含金量的局中隨機變數應對方案，與當前版本頂規 meta 高端理解。
+                        </p>
+                        <!-- 高質感配圖與微動態 -->
+                        <div class="w-full h-44 bg-slate-900 rounded-2xl overflow-hidden relative border border-slate-800">
+                            <img src="https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=600&q=80" 
+                                 alt="Master Vibe" 
+                                 class="w-full h-full object-cover opacity-60 img-zoom">
+                            <div class="absolute inset-0 bg-gradient-to-t from-darkBg via-transparent to-transparent"></div>
+                            <div class="absolute bottom-3 left-3 flex items-center space-x-1.5 bg-slate-950/80 px-2.5 py-1 rounded text-[10px] text-premiumPurple font-semibold border border-purple-500/20">
+                                <span>RANKED S20 MASTER</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 榮耀 3 -->
+                <div class="group relative overflow-hidden rounded-3xl border border-white/5 glass-panel shadow-lg hover:shadow-2xl transition-all duration-300">
+                    <div class="p-8 space-y-4">
+                        <div class="flex items-center justify-between">
+                            <span class="text-[11px] font-bold tracking-widest text-mintGreen uppercase">學員蛻變</span>
+                            <span class="text-xs px-2.5 py-1 rounded-full bg-emerald-950 text-mintGreen font-semibold border border-emerald-800/30">Success Story</span>
+                        </div>
+                        <h3 class="text-lg font-bold text-white">從白金成功突破至鑽石大師</h3>
+                        <p class="text-slate-400 text-sm font-light">
+                            成功引導 50+ 位學員，不論手感與硬體極限如何，皆能透過優化核心大局觀與團隊定位，實現兩階以上的跨越式突破。
+                        </p>
+                        <!-- 高質感配圖與微動態 -->
+                        <div class="w-full h-44 bg-slate-900 rounded-2xl overflow-hidden relative border border-slate-800">
+                            <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=600&q=80" 
+                                 alt="Gamer Desk" 
+                                 class="w-full h-full object-cover opacity-60 img-zoom">
+                            <div class="absolute inset-0 bg-gradient-to-t from-darkBg via-transparent to-transparent"></div>
+                            <div class="absolute bottom-3 left-3 flex items-center space-x-1.5 bg-slate-950/80 px-2.5 py-1 rounded text-[10px] text-mintGreen font-semibold border border-emerald-500/20">
+                                <span>WIN RATE +24.5%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 核心產品與技術解決方案 (Products & Solutions) -->
+    <section id="products" class="py-24 px-6 lg:px-12 max-w-7xl mx-auto scroll-mt-20">
+        <div class="reveal">
+            <!-- 區塊標題 -->
+            <div class="flex flex-col items-center text-center space-y-3 mb-16">
+                <span class="text-xs font-bold tracking-widest text-premiumPurple uppercase">Products &amp; Solutions</span>
+                <h2 class="text-3xl sm:text-4xl font-bold text-white">核心產品與技術解決方案</h2>
+                <div class="h-1 w-12 bg-premiumPurple rounded-full"></div>
+            </div>
+
+            <!-- 產品卡片清單 -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- 產品 1：一對一教練指導 -->
+                <div class="p-8 rounded-3xl border border-white/5 glass-panel glow-card flex flex-col justify-between space-y-8 relative overflow-hidden group">
+                    <div class="absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity duration-500 pointer-events-none -z-10">
+                        <img src="https://images.unsplash.com/photo-1516534775068-bb57845a406a?auto=format&fit=crop&w=400&q=80" alt="Coaching" class="w-full h-full object-cover">
+                    </div>
+                    <div class="space-y-4">
+                        <div class="w-12 h-12 rounded-2xl bg-blue-950/80 text-techBlue flex items-center justify-center border border-blue-800/30 text-2xl">
+                            <span aria-hidden="true">👨‍🏫</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-white">一對一教練指導</h3>
+                        <p class="text-slate-400 text-sm leading-relaxed font-light">
+                            檢視玩家的遊玩紀錄，並加以指導。透過詳細的分析與個人化建議，幫助你理解決策過程，提升競技水平。
+                        </p>
+                    </div>
+                    <a href="https://courses.taiwanmds.com/product/information?p=02c0c7b9ec7b11f0b3480242ac110002" target="_blank" class="inline-flex items-center space-x-2 text-techBlue font-semibold hover:text-techBlue/80 transition-colors pt-4 border-t border-slate-800">
+                        <span>了解更多</span>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                    </a>
+                </div>
+
+                <!-- 產品 2：代打牌位 -->
+                <div class="p-8 rounded-3xl border border-white/5 glass-panel glow-card flex flex-col justify-between space-y-8 relative overflow-hidden group">
+                    <div class="absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity duration-500 pointer-events-none -z-10">
+                        <img src="https://images.unsplash.com/photo-1560275619-cd4628902249?auto=format&fit=crop&w=400&q=80" alt="Booster" class="w-full h-full object-cover">
+                    </div>
+                    <div class="space-y-4">
+                        <div class="w-12 h-12 rounded-2xl bg-purple-950/80 text-premiumPurple flex items-center justify-center border border-purple-800/30 text-2xl">
+                            <span aria-hidden="true">🚀</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-white">代打牌位</h3>
+                        <p class="text-slate-400 text-sm leading-relaxed font-light">
+                            替忙碌的您爬到您指定的位階。由專業選手代理，安全快速地達成目標段位，讓您享受高階遊戲體驗。
+                        </p>
+                    </div>
+                    <a href="https://judgai.com/" target="_blank" class="inline-flex items-center space-x-2 text-premiumPurple font-semibold hover:text-premiumPurple/80 transition-colors pt-4 border-t border-slate-800">
+                        <span>了解更多</span>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                    </a>
+                </div>
+
+                <!-- 產品 3：陪打服務 -->
+                <div class="p-8 rounded-3xl border border-white/5 glass-panel glow-card flex flex-col justify-between space-y-8 relative overflow-hidden group">
+                    <div class="absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity duration-500 pointer-events-none -z-10">
+                        <img src="https://images.unsplash.com/photo-1550439773-41c016f9b82f?auto=format&fit=crop&w=400&q=80" alt="Companion Play" class="w-full h-full object-cover">
+                    </div>
+                    <div class="space-y-4">
+                        <div class="w-12 h-12 rounded-2xl bg-emerald-950/80 text-mintGreen flex items-center justify-center border border-emerald-800/30 text-2xl">
+                            <span aria-hidden="true">👥</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-white">陪打服務</h3>
+                        <p class="text-slate-400 text-sm leading-relaxed font-light">
+                            陪伴沒朋友的您一起遊玩，並且加以指導遊戲大局觀點。實時互動、共同進步，打造愉快的遊戲體驗。
+                        </p>
+                    </div>
+                    <a href="https://judgai.com/saymind" target="_blank" class="inline-flex items-center space-x-2 text-mintGreen font-semibold hover:text-mintGreen/80 transition-colors pt-4 border-t border-slate-800">
+                        <span>了解更多</span>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 技術部落格 (Blog) -->
+    <section id="blog" class="py-24 bg-slate-950/40 border-y border-purple-950/30 scroll-mt-20">
+        <div class="max-w-7xl mx-auto px-6 lg:px-12 reveal">
+            <!-- 區塊標題 -->
+            <div class="flex flex-col items-center text-center space-y-3 mb-16">
+                <span class="text-xs font-bold tracking-widest text-premiumPurple uppercase">Tactics &amp; Mindset</span>
+                <h2 class="text-3xl sm:text-4xl font-bold text-white">戰術思維與觀念分享</h2>
+                <div class="h-1 w-12 bg-premiumPurple rounded-full"></div>
+            </div>
+
+            <!-- 文章列表 -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- 文章 1 -->
+                <article class="p-8 rounded-3xl border border-white/5 glass-panel glow-card flex flex-col md:flex-row gap-6 justify-between items-stretch">
+                    <div class="w-full md:w-2/5 rounded-2xl overflow-hidden relative min-h-[160px] border border-slate-800">
+                        <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=400&q=80" 
+                             alt="Map analysis" 
+                             class="w-full h-full object-cover img-zoom">
+                    </div>
+                    <div class="w-full md:w-3/5 flex flex-col justify-between space-y-4">
+                        <div class="space-y-3">
+                            <div class="flex items-center space-x-3 text-xs text-slate-400">
+                                <span class="text-premiumPurple font-semibold">Apex 戰術精華</span>
+                                <span>•</span>
+                                <span>5 分鐘閱讀</span>
+                            </div>
+                            <h3 class="text-lg font-bold text-white hover:text-premiumPurple transition-colors">
+                                <a href="#">如何透過大局觀與圈預測，在 Apex 中實現低風險穩定進圈？</a>
+                            </h3>
+                            <p class="text-slate-400 text-xs leading-relaxed font-light line-clamp-3">
+                                多數中高階玩家的瓶頸在於：一味依靠拼槍，而忽略進圈路線規劃與盲區卡位。本文精析如何透過落地資源、偵查與圈型縮小機率模型，為隊伍規劃阻力最小之路。
+                            </p>
+                        </div>
+                        <div class="flex items-center justify-between pt-3 border-t border-slate-900 text-xs">
+                            <span class="font-semibold text-premiumPurple">閱讀全文 &rarr;</span>
+                            <span class="text-slate-500">2026.05.12</span>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- 文章 2 -->
+                <article class="p-8 rounded-3xl border border-white/5 glass-panel glow-card flex flex-col md:flex-row gap-6 justify-between items-stretch">
+                    <div class="w-full md:w-2/5 rounded-2xl overflow-hidden relative min-h-[160px] border border-slate-800">
+                        <img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=400&q=80" 
+                             alt="Security Audit" 
+                             class="w-full h-full object-cover img-zoom">
+                    </div>
+                    <div class="w-full md:w-3/5 flex flex-col justify-between space-y-4">
+                        <div class="space-y-3">
+                            <div class="flex items-center space-x-3 text-xs text-slate-400">
+                                <span class="text-techBlue font-semibold">資安與電競跨界</span>
+                                <span>•</span>
+                                <span>8 分鐘閱讀</span>
+                            </div>
+                            <h3 class="text-lg font-bold text-white hover:text-techBlue transition-colors">
+                                <a href="#">從 ISMS 主導稽核員視角看電競團隊的溝通、責任分配與安全感機制</a>
+                            </h3>
+                            <p class="text-slate-400 text-xs leading-relaxed font-light line-clamp-3">
+                                資訊安全的核心理念為「機密、完整、可用（CIA）」。同樣，最完美的電競三人團隊結構，也必須在情報傳達、執行完整度與戰略可用性建立標準。
+                            </p>
+                        </div>
+                        <div class="flex items-center justify-between pt-3 border-t border-slate-900 text-xs">
+                            <span class="font-semibold text-techBlue">閱讀全文 &rarr;</span>
+                            <span class="text-slate-500">2026.06.01</span>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- 多元社群圖示配置 (Social & Community) -->
+    <section id="socials" class="py-24 bg-slate-950/40 border-y border-purple-950/30 scroll-mt-20">
+        <div class="max-w-7xl mx-auto px-6 lg:px-12 reveal">
+            <!-- 區塊標題 -->
+            <div class="flex flex-col items-center text-center space-y-3 mb-16">
+                <span class="text-xs font-bold tracking-widest text-premiumPurple uppercase">Community &amp; Links</span>
+                <h2 class="text-3xl sm:text-4xl font-bold text-white">多元社群連結</h2>
+                <div class="h-1 w-12 bg-premiumPurple rounded-full"></div>
+            </div>
+
+            <!-- 社群卡片展示 -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-4xl mx-auto">
+                <!-- GitHub -->
+                <a href="https://github.com/sue60602" target="_blank" class="group p-6 rounded-2xl border border-white/5 glass-panel glow-card flex flex-col items-center justify-center space-y-4 hover:border-slate-600 transition-all duration-300">
+                    <div class="w-16 h-16 rounded-xl bg-slate-900/60 flex items-center justify-center text-4xl group-hover:scale-110 transition-transform">
+                        <svg class="w-8 h-8 text-slate-200" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v 3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                    </div>
+                    <div class="text-center">
+                        <h3 class="text-lg font-bold text-white">GitHub</h3>
+                        <p class="text-xs text-slate-400 mt-1">探索技術專案</p>
+                    </div>
+                </a>
+
+                <!-- Facebook -->
+                <a href="#" target="_blank" class="group p-6 rounded-2xl border border-white/5 glass-panel glow-card flex flex-col items-center justify-center space-y-4 hover:border-blue-600 transition-all duration-300">
+                    <div class="w-16 h-16 rounded-xl bg-blue-900/60 flex items-center justify-center text-4xl group-hover:scale-110 transition-transform">
+                        <svg class="w-8 h-8 text-blue-300" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                    </div>
+                    <div class="text-center">
+                        <h3 class="text-lg font-bold text-white">Facebook</h3>
+                        <p class="text-xs text-slate-400 mt-1">加入社群互動</p>
+                    </div>
+                </a>
+
+                <!-- LinkedIn -->
+                <a href="#" target="_blank" class="group p-6 rounded-2xl border border-white/5 glass-panel glow-card flex flex-col items-center justify-center space-y-4 hover:border-blue-500 transition-all duration-300">
+                    <div class="w-16 h-16 rounded-xl bg-blue-950/60 flex items-center justify-center text-4xl group-hover:scale-110 transition-transform">
+                        <svg class="w-8 h-8 text-blue-200" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.225 0z"/></svg>
+                    </div>
+                    <div class="text-center">
+                        <h3 class="text-lg font-bold text-white">LinkedIn</h3>
+                        <p class="text-xs text-slate-400 mt-1">專業職涯連結</p>
+                    </div>
+                </a>
+
+                <!-- LINE -->
+                <a href="#" target="_blank" class="group p-6 rounded-2xl border border-white/5 glass-panel glow-card flex flex-col items-center justify-center space-y-4 hover:border-green-500 transition-all duration-300">
+                    <div class="w-16 h-16 rounded-xl bg-green-900/60 flex items-center justify-center text-4xl group-hover:scale-110 transition-transform">
+                        <svg class="w-8 h-8 text-green-300" fill="currentColor" viewBox="0 0 24 24"><path d="M19.365 9.863c.349-1.81.088-3.139-.824-4.594-.915-1.449-2.565-2.512-4.514-2.512-4.268 0-7.739 3.471-7.739 7.739 0 1.65.515 3.147 1.433 4.412l-.956 3.506 3.779-1.84c1.228.678 2.632 1.069 4.082 1.069 1.39 0 2.72-.343 3.883-1.006l3.779 1.84-.956-3.506c.918-1.265 1.433-2.762 1.433-4.412 0-.827-.084-1.597-.217-2.296zm-5.092 6.427h-.742V8.36h.742v7.93zm-2.765 0h-.742V8.36h.742v7.93zm5.53 0h-.742V8.36h.742v7.93z"/></svg>
+                    </div>
+                    <div class="text-center">
+                        <h3 class="text-lg font-bold text-white">LINE</h3>
+                        <p class="text-xs text-slate-400 mt-1">實時聯繫溝通</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 聯絡與預約諮詢 (Contact) -->
+    <section id="contact" class="py-28 px-6 lg:px-12 max-w-5xl mx-auto text-center scroll-mt-20 relative">
+        <div class="absolute inset-0 bg-gradient-to-t from-purple-950/20 via-transparent to-transparent -z-10 rounded-[3rem]"></div>
+        <div class="reveal space-y-10">
+            <!-- 裝飾微光線 -->
+            <div class="mx-auto w-12 h-1 bg-gradient-to-r from-techBlue to-premiumPurple rounded-full"></div>
+            
+            <div class="space-y-4">
+                <span class="text-xs font-bold tracking-widest text-premiumPurple uppercase">Embark on Your Evolution</span>
+                <h2 class="text-3xl sm:text-5xl font-extrabold text-white tracking-tight leading-tight">邁向更高的競技舞台</h2>
+                <p class="text-slate-400 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed font-light">
+                    如果您正在尋找值得信賴的電競顧問、實戰陪玩夥伴或系統化提升技術的教練，現在就開啟您的白金進化旅程。
+                </p>
+            </div>
+
+            <!-- 大型玻璃預約按鈕 -->
+            <div class="pt-6">
+                <a href="https://calendar.app.google/2rxk8QQi197eyFob8" target="_blank" class="inline-flex items-center space-x-3 px-10 py-5 rounded-2xl bg-gradient-to-r from-tsmCharcoal to-tsmRed text-white font-semibold text-lg hover:shadow-2xl hover:shadow-tsmRed/40 hover:scale-[1.03] transition-all duration-300 transform active:scale-95 group">
+                    <span>立即開啟 Google 行事曆預約</span>
+                    <svg class="w-5 h-5 group-hover:translate-x-1.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                </a>
+            </div>
+
+            <!-- 資安聲明防線 -->
+            <div class="pt-10 flex flex-col sm:flex-row items-center justify-center gap-6 text-xs text-slate-400 font-medium">
+                <span class="flex items-center space-x-1.5">
+                    <svg class="w-4 h-4 text-mintGreen" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+                    <span>100% 機密性與防護承諾</span>
+                </span>
+                <span class="hidden sm:inline text-slate-700">|</span>
+                <span class="flex items-center space-x-1.5">
+                    <svg class="w-4 h-4 text-techBlue" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    <span>預計首談分析時間：30 分鐘</span>
+                </span>
+            </div>
+        </div>
+    </section>
+
+    <!-- 聯絡需求表單 (Contact Form) -->
+    <section id="form" class="py-24 px-6 lg:px-12 max-w-5xl mx-auto scroll-mt-20">
+        <div class="reveal">
+            <!-- 區塊標題 -->
+            <div class="flex flex-col items-center text-center space-y-3 mb-16">
+                <span class="text-xs font-bold tracking-widest text-premiumPurple uppercase">Get in Touch</span>
+                <h2 class="text-3xl sm:text-4xl font-bold text-white">填寫您的需求</h2>
+                <div class="h-1 w-12 bg-premiumPurple rounded-full"></div>
+            </div>
+
+            <!-- 表單卡片 -->
+            <div class="max-w-2xl mx-auto">
+                <div class="p-8 rounded-3xl border border-white/5 glass-panel space-y-6">
+                    <div class="space-y-3">
+                        <h3 class="text-xl font-bold text-white">準備好邁向下一步了嗎？</h3>
+                        <p class="text-slate-400 font-light leading-relaxed">
+                            填寫以下表單，告訴我們您的具體需求。我們將在 24 小時內回覆您，並為您制定個性化的電競進化方案。
+                        </p>
+                    </div>
+
+                    <!-- 表單項目快速預覽 -->
+                    <div class="pt-2 space-y-2 text-sm text-slate-400 font-light">
+                        <div class="flex items-center space-x-2">
+                            <span class="w-2 h-2 rounded-full bg-techBlue"></span>
+                            <span>選擇您感興趣的服務類型</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <span class="w-2 h-2 rounded-full bg-premiumPurple"></span>
+                            <span>詳述您的當前等級與目標</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <span class="w-2 h-2 rounded-full bg-mintGreen"></span>
+                            <span>提供聯繫方式與可用時段</span>
+                        </div>
+                    </div>
+
+                    <!-- 表單按鈕 -->
+                    <div class="pt-6">
+                        <a href="https://forms.gle/E2kUa5rviPeGpkz67" target="_blank" class="w-full inline-flex items-center justify-center space-x-3 px-8 py-4 rounded-2xl bg-gradient-to-r from-tsmCharcoal to-tsmRed text-white font-semibold text-base hover:shadow-2xl hover:shadow-tsmRed/40 hover:scale-[1.02] transition-all duration-300 transform active:scale-95 group">
+                            <span>立即填寫需求表單</span>
+                            <svg class="w-5 h-5 group-hover:translate-x-1.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                        </a>
+                    </div>
+
+                    <!-- 額外信息 -->
+                    <div class="pt-4 border-t border-slate-800 text-center">
+                        <p class="text-xs text-slate-500 font-light">
+                            <span class="text-premiumPurple font-semibold">💬 偏好透過即時溝通？</span><br>
+                            您也可以透過上方社群連結聯繫我們
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 頁尾 (Footer) -->
+    <footer class="border-t border-slate-900 bg-slate-950/40 glass-panel py-10 px-6 lg:px-12 text-center text-xs text-slate-500">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-6">
+            <div class="flex items-center space-x-2.5">
+                <div class="w-6 h-6 rounded bg-slate-900 flex items-center justify-center text-white text-[10px] font-black">Y</div>
+                <span class="font-bold text-slate-200">YS SU 蘇郁盛</span>
+            </div>
+            <p>版權所有 © 2026 蘇郁盛 YS SU. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript 邏輯控制 -->
+    <script>
+        // DOM 載入後執行
+        window.onload = function() {
+            initCanvasParticles();
+            initTypewriter();
+            initNavbar();
+            initCtaButton();
+            initMobileMenu();
+            initRevealOnScroll();
+        }
+
+        // 1. Background Canvas Particle Connected Nodes Effect (Optimized for Dark Theme)
+        function initCanvasParticles() {
+            const canvas = document.getElementById('bg-canvas');
+            const ctx = canvas.getContext('2d');
+
+            let particlesArray = [];
+            const connectionDistance = 150; // 連接線距離
+
+            // 設定 Canvas 寬高自適應
+            function resizeCanvas() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+            window.addEventListener('resize', resizeCanvas);
+            resizeCanvas();
+
+            // 粒子類別定義
+            class Particle {
+                constructor() {
+                    this.x = Math.random() * canvas.width;
+                    this.y = Math.random() * canvas.height;
+                    this.size = Math.random() * 2 + 1; // 1 ~ 3px 小點點
+                    this.speedX = (Math.random() - 0.5) * 0.4; // 慢飄移
+                    this.speedY = (Math.random() - 0.5) * 0.4;
+                    this.color = 'rgba(238, 0, 18, 0.25)'; // TSM 紅色粒子
+                }
+                update() {
+                    this.x += this.speedX;
+                    this.y += this.speedY;
+
+                    // 碰撞邊界反彈
+                    if (this.x < 0 || this.x > canvas.width) this.speedX = -this.speedX;
+                    if (this.y < 0 || this.y > canvas.height) this.speedY = -this.speedY;
+                }
+                draw() {
+                    ctx.fillStyle = this.color;
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            }
+
+            // 初始化粒子群
+            function initParticles() {
+                particlesArray = [];
+                const numberOfParticles = Math.min(100, Math.floor((canvas.width * canvas.height) / 16000));
+                for (let i = 0; i < numberOfParticles; i++) {
+                    particlesArray.push(new Particle());
+                }
+            }
+            initParticles();
+
+            // 連接鄰近粒子的連線
+            function connect() {
+                for (let a = 0; a < particlesArray.length; a++) {
+                    for (let b = a; b < particlesArray.length; b++) {
+                        let dx = particlesArray[a].x - particlesArray[b].x;
+                        let dy = particlesArray[a].y - particlesArray[b].y;
+                        let distance = Math.sqrt(dx * dx + dy * dy);
+
+                        if (distance < connectionDistance) {
+                            let opacity = (1 - (distance / connectionDistance)) * 0.15;
+                            ctx.strokeStyle = `rgba(238, 0, 18, ${opacity})`;
+                            ctx.lineWidth = 0.9;
+                            ctx.beginPath();
+                            ctx.moveTo(particlesArray[a].x, particlesArray[a].y);
+                            ctx.lineTo(particlesArray[b].x, particlesArray[b].y);
+                            ctx.stroke();
+                        }
+                    }
+                }
+            }
+
+            // 動畫渲染循環
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                drawStrategicCrosses();
+
+                for (let i = 0; i < particlesArray.length; i++) {
+                    particlesArray[i].update();
+                    particlesArray[i].draw();
+                }
+                connect();
+                requestAnimationFrame(animate);
+            }
+            animate();
+
+            // 輔助繪製戰術十字星背景
+            function drawStrategicCrosses() {
+                ctx.strokeStyle = 'rgba(238, 0, 18, 0.04)';
+                ctx.lineWidth = 1;
+                const stepX = canvas.width / 5;
+                const stepY = canvas.height / 5;
+                for (let x = stepX; x < canvas.width; x += stepX) {
+                    for (let y = stepY; y < canvas.height; y += stepY) {
+                        ctx.beginPath();
+                        ctx.moveTo(x - 5, y);
+                        ctx.lineTo(x + 5, y);
+                        ctx.moveTo(x, y - 5);
+                        ctx.lineTo(x, y + 5);
+                        ctx.stroke();
+                    }
+                }
+            }
+
+            window.addEventListener('resize', initParticles);
+        }
+
+        // 2. Typing Animation for Hero Title
+        function initTypewriter() {
+            const text = "CHAMPION - 成為獵殺者，創造屬於你的榮耀時刻";
+            const speed = 100;
+            let index = 0;
+            const element = document.getElementById('typewriter');
+
+            function type() {
+                if (index < text.length) {
+                    element.innerHTML += text.charAt(index);
+                    index++;
+                    setTimeout(type, speed);
+                } else {
+                    element.classList.remove('cursor-blink');
+                }
+            }
+            type();
+        }
+
+        // 3. Navbar Scrolling Styling (Adapted for Dark theme)
+        function initNavbar() {
+            const navbar = document.getElementById('navbar');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    navbar.classList.remove('border-transparent');
+                    navbar.classList.add('bg-darkBg/80', 'backdrop-blur-xl', 'border-slate-900', 'shadow-2xl', 'py-4');
+                } else {
+                    navbar.classList.remove('bg-darkBg/80', 'backdrop-blur-xl', 'border-slate-900', 'shadow-2xl', 'py-4');
+                    navbar.classList.add('border-transparent', 'py-5');
+                }
+            });
+        }
+
+        // 4. Premium Button Interactive Status Change on Hover
+        function initCtaButton() {
+            const btn = document.getElementById('interactive-cta');
+            const txt = document.getElementById('cta-text');
+
+            if (btn && txt) {
+                btn.addEventListener('mouseenter', () => {
+                    txt.style.opacity = '0';
+                    setTimeout(() => {
+                        txt.innerText = "Status: Ready to Connect";
+                        txt.style.opacity = '1';
+                        btn.style.borderColor = 'rgba(16, 185, 129, 0.7)'; // 薄荷綠
+                        btn.style.color = '#10b981';
+                        btn.style.boxShadow = '0 15px 30px rgba(16, 185, 129, 0.2)';
+                    }, 150);
+                });
+
+                btn.addEventListener('mouseleave', () => {
+                    txt.style.opacity = '0';
+                    setTimeout(() => {
+                        txt.innerText = "預約實戰諮詢";
+                        txt.style.opacity = '1';
+                        btn.style.borderColor = 'rgba(139, 92, 246, 0.4)'; // 戰術紫
+                        btn.style.color = '#8b5cf6';
+                        btn.style.boxShadow = 'none';
+                    }, 150);
+                });
+            }
+        }
+
+        // 5. Mobile Menu Toggle
+        function initMobileMenu() {
+            const menuBtn = document.getElementById('menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const links = document.querySelectorAll('.mobile-link');
+            
+            const top = document.getElementById('hamburger-top');
+            const mid = document.getElementById('hamburger-mid');
+            const bot = document.getElementById('hamburger-bot');
+
+            menuBtn.addEventListener('click', () => {
+                const isOpen = mobileMenu.classList.contains('translate-x-0');
+                if (isOpen) {
+                    mobileMenu.classList.add('translate-x-full');
+                    mobileMenu.classList.remove('translate-x-0');
+                    top.classList.remove('rotate-45', 'translate-y-2');
+                    mid.classList.remove('opacity-0');
+                    bot.classList.remove('-rotate-45', '-translate-y-2');
+                } else {
+                    mobileMenu.classList.remove('translate-x-full');
+                    mobileMenu.classList.add('translate-x-0');
+                    top.classList.add('rotate-45', 'translate-y-2');
+                    mid.classList.add('opacity-0');
+                    bot.classList.add('-rotate-45', '-translate-y-2');
+                }
+            });
+
+            links.forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenu.classList.add('translate-x-full');
+                    mobileMenu.classList.remove('translate-x-0');
+                    top.classList.remove('rotate-45', 'translate-y-2');
+                    mid.classList.remove('opacity-0');
+                    bot.classList.remove('-rotate-45', '-translate-y-2');
+                });
+            });
+        }
+
+        // 6. Reveal Elements on Scroll
+        function initRevealOnScroll() {
+            const reveals = document.querySelectorAll('.reveal');
+            const observerOptions = {
+                root: null,
+                threshold: 0.1,
+                rootMargin: '0px'
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+
+            reveals.forEach(reveal => {
+                observer.observe(reveal);
+            });
+            
+            setTimeout(() => {
+                const rect = reveals[0].getBoundingClientRect();
+                if(rect.top < window.innerHeight) {
+                    reveals[0].classList.add('active');
+                }
+            }, 100);
+        }
+    </script>
+</body>
+</html>
