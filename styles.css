@@ -66,7 +66,11 @@ a:hover{ color: var(--primary-dark); }
 .h-line, .accent-line{ background: var(--primary) !important; }
 
 /* Ensure images still visible on dark background */
-img{ image-rendering: auto; }
+img{ 
+    image-rendering: auto;
+    filter: brightness(1.15) contrast(1.1);
+    opacity: 1;
+}
 
 /* Footer / small text muted */
 .text-slate-400, .muted{ color: var(--muted) !important; }

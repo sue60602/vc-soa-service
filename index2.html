@@ -110,6 +110,38 @@
         .img-zoom:hover {
             transform: scale(1.06);
         }
+        
+        /* 背景影片覆蓋樣式 */
+        .bg-video-wrap {
+            position: fixed;
+            inset: 0;
+            overflow: hidden;
+            z-index: -15; /* 放在大部分背景之上，但低於主要內容 */
+            pointer-events: none;
+        }
+        .bg-video-wrap iframe {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 177.77777778vh; /* 16:9 cover technique */
+            height: 100vh;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            opacity: 0.98;
+        }
+        .bg-video-overlay {
+            position: absolute;
+            inset: 0;
+            /* 稍微加深遮罩以提升前景文字可讀性 */
+            background: linear-gradient(rgba(3,7,18,0.68), rgba(3,7,18,0.45));
+            pointer-events: none;
+            mix-blend-mode: normal;
+        }
+
+        /* 英雄區文字可讀性微調 */
+        .hero-inner { position: relative; z-index: 30; }
+        #hero h1 { text-shadow: 0 6px 30px rgba(0,0,0,0.65); }
+        #hero p { text-shadow: 0 4px 18px rgba(0,0,0,0.55); }
     </style>
     <!-- Custom black-red theme overrides -->
     <link rel="stylesheet" href="styles.css">
@@ -121,6 +153,12 @@
 
     <!-- 背景網格線疊加 -->
     <div class="fixed inset-0 -z-30 bg-[linear-gradient(to_right,rgba(139,92,246,0.02)_1px,transparent_1px),linear-gradient(to_bottom,rgba(139,92,246,0.02)_1px,transparent_1px)] bg-[size:5rem_5rem] pointer-events-none"></div>
+
+    <!-- 背景 YouTube 影片（滿版、自動播放、靜音、重複） -->
+    <div class="bg-video-wrap" aria-hidden="true">
+        <div class="bg-video-overlay"></div>
+        <iframe class="bg-video-iframe" src="https://www.youtube.com/embed/WRVsY9S6mLs?autoplay=1&mute=1&controls=0&loop=1&playlist=WRVsY9S6mLs&modestbranding=1&rel=0&playsinline=1" title="Background video" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
+    </div>
 
     <!-- 背景奢華漸層氛圍光暈 -->
     <div class="fixed top-[-10%] left-[-10%] w-[60vw] h-[60vw] rounded-full bg-blue-950/40 ambient-glow -z-10"></div>
@@ -184,7 +222,7 @@
     <section id="hero" class="relative min-h-screen flex items-center pt-32 pb-24 px-6 lg:px-12 max-w-7xl mx-auto">
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center w-full">
             <!-- 左側文字與核心 CTA -->
-            <div class="lg:col-span-7 flex flex-col justify-center space-y-8 z-10">
+            <div class="lg:col-span-7 flex flex-col justify-center space-y-8 hero-inner">
                 <!-- 狀態標籤 -->
                 <div class="inline-flex items-center space-x-2.5 px-4 py-2 rounded-full bg-purple-950/60 border border-premiumPurple/30 w-fit">
                     <span class="flex h-2.5 w-2.5 relative">
@@ -225,7 +263,7 @@
                 <div class="absolute w-80 h-80 rounded-[2.5rem] overflow-hidden border border-premiumPurple/30 shadow-2xl rotate-6 animate-[pulse_6s_infinite_alternate]">
                     <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80" 
                          alt="Premium Tech Abstract" 
-                         class="w-full h-full object-cover"
+                         class="w-full h-full object-cover opacity-80"
                          onerror="this.style.display='none'">
                     <div class="absolute inset-0 bg-gradient-to-t from-darkBg via-transparent to-transparent"></div>
                 </div>
@@ -340,7 +378,7 @@
                         <!-- 卡片 1 -->
                         <div class="p-6 rounded-2xl border border-white/5 glass-panel glow-card flex flex-col justify-between h-48 relative overflow-hidden group">
                             <div class="absolute inset-0 bg-gradient-to-b from-transparent to-slate-950/80 -z-10"></div>
-                            <div class="absolute inset-0 opacity-35 group-hover:opacity-50 transition-opacity">
+                            <div class="absolute inset-0 opacity-10 group-hover:opacity-20 transition-opacity">
                                 <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=300&q=80" alt="Esports" class="w-full h-full object-cover">
                             </div>
                             <div>
@@ -355,7 +393,7 @@
                         <!-- 卡片 2 -->
                         <div class="p-6 rounded-2xl border border-white/5 glass-panel glow-card flex flex-col justify-between h-48 relative overflow-hidden group">
                             <div class="absolute inset-0 bg-gradient-to-b from-transparent to-slate-950/80 -z-10"></div>
-                            <div class="absolute inset-0 opacity-35 group-hover:opacity-50 transition-opacity">
+                            <div class="absolute inset-0 opacity-10 group-hover:opacity-20 transition-opacity">
                                 <img src="https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=300&q=80" alt="Gaming Setup" class="w-full h-full object-cover">
                             </div>
                             <div>
@@ -370,7 +408,7 @@
                         <!-- 卡片 3 -->
                         <div class="p-6 rounded-2xl border border-white/5 glass-panel glow-card flex flex-col justify-between h-48 relative overflow-hidden group">
                             <div class="absolute inset-0 bg-gradient-to-b from-transparent to-slate-950/80 -z-10"></div>
-                            <div class="absolute inset-0 opacity-35 group-hover:opacity-50 transition-opacity">
+                            <div class="absolute inset-0 opacity-10 group-hover:opacity-20 transition-opacity">
                                 <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=300&q=80" alt="Tech Motherboard" class="w-full h-full object-cover">
                             </div>
                             <div>
@@ -385,7 +423,7 @@
                         <!-- 卡片 4 -->
                         <div class="p-6 rounded-2xl border border-white/5 glass-panel glow-card flex flex-col justify-between h-48 relative overflow-hidden group">
                             <div class="absolute inset-0 bg-gradient-to-b from-transparent to-slate-950/80 -z-10"></div>
-                            <div class="absolute inset-0 opacity-35 group-hover:opacity-50 transition-opacity">
+                            <div class="absolute inset-0 opacity-10 group-hover:opacity-20 transition-opacity">
                                 <img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=300&q=80" alt="Matrix Cyber" class="w-full h-full object-cover">
                             </div>
                             <div>
