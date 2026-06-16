@@ -1,0 +1,84 @@
+/* Black-Red Theme Overrides */
+:root{
+  --bg:#050505;
+  --text:#f7f7f7;
+  --muted:#9ca3af;
+  --primary:#ef4444; /* red-500 */
+  --primary-dark:#991b1b;
+  --panel:rgba(20,20,22,0.6);
+}
+
+body{
+  background:var(--bg) !important;
+  color:var(--text) !important;
+}
+
+/* Selection */
+::selection{ background: rgba(239,68,68,0.14); color: var(--text); }
+
+/* Utility token fallbacks used in HTML */
+.text-tsmRed{ color:var(--primary) !important; }
+.bg-tsmRed{ background-color:var(--primary) !important; }
+.border-tsmRed{ border-color:rgba(239,68,68,0.35) !important; }
+.shadow-tsmRed\/:20{ /* noop fallback if present; keep safe */ }
+.tsmCrimson{ color:#dc2626 !important; }
+.tsmCharcoal{ background:#0b0b0b !important; }
+
+/* Dark background helpers */
+.bg-darkBg{ background:var(--bg) !important; }
+.panelBg{ background: var(--panel) !important; }
+
+/* Glass panels: darker with subtle red border */
+.glass-panel{
+  background: rgba(8,8,10,0.6) !important;
+  border: 1px solid rgba(239,68,68,0.06) !important;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.6) !important;
+}
+.glass-panel-light{
+  background: rgba(255,255,255,0.02) !important;
+  border:1px solid rgba(255,255,255,0.02) !important;
+}
+
+/* Glow card: red gradient */
+.glow-card::after{
+  background: linear-gradient(135deg, rgba(239,68,68,0.28), rgba(190,18,60,0.18)) !important;
+}
+.glow-card:hover{ box-shadow: 0 30px 60px rgba(190,18,60,0.12), 0 0 20px rgba(239,68,68,0.06) !important; transform: translateY(-6px) !important; }
+
+/* Ambient glows become red-tinted */
+.ambient-glow{ filter: blur(140px); opacity:0.28; pointer-events:none; background: radial-gradient(circle at center, rgba(239,68,68,0.24), rgba(190,18,60,0.08)); }
+
+/* Cursor blink use red */
+.cursor-blink::after{ color:var(--primary) !important; }
+
+/* Links and call-to-actions */
+a, a:visited{ color: var(--primary); }
+a:hover{ color: var(--primary-dark); }
+
+/* CTA buttons override */
+#interactive-cta{ background: linear-gradient(90deg, #0b0b0b 0%, var(--primary) 100%) !important; color: #fff !important; border-color: rgba(239,68,68,0.22) !important; box-shadow: 0 10px 30px rgba(239,68,68,0.08) !important; }
+#interactive-cta:hover{ transform: translateY(-3px) !important; }
+
+/* Navbar border */
+#navbar{ border-bottom-color: rgba(239,68,68,0.06) !important; }
+
+/* Small accents */
+.h-line, .accent-line{ background: var(--primary) !important; }
+
+/* Ensure images still visible on dark background */
+img{ image-rendering: auto; }
+
+/* Footer / small text muted */
+.text-slate-400, .muted{ color: var(--muted) !important; }
+
+/* Improve contrast for headings */
+h1,h2,h3,h4{ color: #fff !important; }
+
+/* Mobile menu background */
+#mobile-menu{ background: linear-gradient(180deg, rgba(0,0,0,0.95), rgba(10,0,0,0.9)) !important; }
+
+/* Misc tweaks to override Tailwind where needed */
+.bg-gradient-to-r.from-tsmCharcoal.to-tsmRed{ background: linear-gradient(90deg,#070707,var(--primary)) !important; }
+
+/* Fallback for any element using 'text-tsmRed' via utility classes */
+.text-tsmRed, .bg-tsmCrimson, .bg-tsmRed{ }
